@@ -1,6 +1,6 @@
-﻿using Passman.Commands.GeneratePassword;
-using Passman.Commands.GetPassword;
+﻿using Passman.Commands.GetPassword;
 using Passman.Commands.SavePasswords;
+using PasswordManager.Commands;
 using Spectre.Console.Cli;
 
 CommandApp app = new();

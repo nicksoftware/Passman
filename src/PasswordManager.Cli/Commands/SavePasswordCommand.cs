@@ -11,16 +11,16 @@ namespace Passman.Commands.SavePasswords
         {
             [CommandArgument(0, "<WEBSITE>")]
             [Description("The websites url, (This should be unique)")]
-            public string Website { get; set; }
+            public string Website { get; set; } = String.Empty;
 
             [CommandArgument(1, "<USERNAME>")]
             [Description("Your username on the site")]
-            public string Username { get; set; }
+            public string Username { get; set; } =String.Empty;
 
 
             [CommandArgument(1, "<PASSWORD>")]
             [Description("Your password on the site")]
-            public string Password { get; set; }
+            public string Password { get; set; } = string.Empty;
 
 
         }

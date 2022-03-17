@@ -1,9 +1,11 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
+using Passman;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
-namespace Passman.Commands.GeneratePassword
+namespace PasswordManager.Commands
 {
     public class GeneratePasswordCommand : Command<GeneratePasswordCommand.GeneratePasswordSettings>
     {
@@ -19,15 +21,28 @@ namespace Passman.Commands.GeneratePassword
             public string Username { get; set; }
 
             [CommandOption("-l| --length")]
-            [DefaultValue(0)]
+            [DefaultValue(6)]
             public int PasswordLength { get; set; }
+
+            [CommandOption("-s| --special-characters")]
+            [DefaultValue(false)]
+            public bool IncludeSpecialChar { get; set; }
+
+
+            [CommandOption("-n| --numeric-characters")]
+            [DefaultValue(false)]
+            public bool IncludeNumerics { get; set; }
         }
 
 
         public override int Execute([NotNull] CommandContext context, [NotNull] GeneratePasswordSettings settings)
         {
-            var passwordLength = settings.PasswordLength;
-            var generatedPassword = settings.PasswordLength > 0 ? GenerateRandomPassword(passwordLength) : GenerateRandomPassword();
+            int passwordLength = settings.PasswordLength;
+
+            string generatedPassword = GenerateRandomPassword(
+                    passwordLength,
+                    settings.IncludeSpecialChar,
+                    settings.IncludeNumerics);
 
             Password newPassword = Password.Create(
                 site: settings.Website,
@@ -48,15 +63,15 @@ namespace Passman.Commands.GeneratePassword
                 .Start("Saving Password...", ctx =>
                 {
                     // Simulate some work
-                    ctx.Status("Encrypting Data...");
+                    _ = ctx.Status("Encrypting Data...");
                     // AnsiConsole.MarkupLine("Encrypting Data...");
-                    ctx.Spinner(Spinner.Known.Star);
+                    _ = ctx.Spinner(Spinner.Known.Star);
                     Thread.Sleep(1000);
 
                     // Update the status and spinner
-                    ctx.Status("Finalizing Encryption");
-                    ctx.Spinner(Spinner.Known.Star);
-                    ctx.SpinnerStyle(Style.Parse("green"));
+                    _ = ctx.Status("Finalizing Encryption");
+                    _ = ctx.Spinner(Spinner.Known.Star);
+                    _ = ctx.SpinnerStyle(Style.Parse("green"));
                     Thread.Sleep(1000);
 
                 });
@@ -64,10 +79,33 @@ namespace Passman.Commands.GeneratePassword
 
             return 0;
         }
-        private string GenerateRandomPassword(int length = 6)
+        private static string GenerateRandomPassword(
+            int length,
+            bool includeSpecialChar,
+            bool includeNumerics)
         {
-            var random = new Random();
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            Random random = new();
+            StringBuilder builder = new();
+
+            string alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+            string specialSymbols = "!@#$%^&*-+=:?/.,';~`±§";
+            string numerics = "0123456789";
+
+            _ = builder.Append(alphabets.ToLower());
+            _ = builder.Append(alphabets);
+
+            if (includeSpecialChar)
+            {
+                _ = builder.Append(specialSymbols);
+            }
+
+            if (includeNumerics)
+            {
+                _ = builder.Append(numerics);
+            }
+
+            string chars = builder.ToString();
             return new string(Enumerable.Repeat(chars, length)
                 .Select(s => s[random.Next(s.Length)]).ToArray());
         }
