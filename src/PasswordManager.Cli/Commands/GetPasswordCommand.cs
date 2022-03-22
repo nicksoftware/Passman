@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
-namespace Passman.Commands.GetPassword
+namespace Passman.Commands
 {
     public class GetPasswordCommand : Command<GetPasswordCommand.GetPasswordSettings>
     {
@@ -12,10 +12,10 @@ namespace Passman.Commands.GetPassword
             [CommandArgument(0, "[WEBSITE_NAME]")]
             public string WebsiteName { get; set; } = String.Empty;
 
-            [CommandOption( "-a| --all")]
+            [CommandOption("-a| --all")]
             public bool All { get; set; }
 
-            [CommandOption( "-c| --clear")]
+            [CommandOption("-c| --clear")]
             [DefaultValue(false)]
             public bool IsClear { get; set; }
         }
@@ -38,7 +38,7 @@ namespace Passman.Commands.GetPassword
                 TextCopy.ClipboardService.SetText($"{password.Username} {password.SecretPassword}");
 
                 //DISPLAY ON CONSOLE
-                _ = table.AddRow(password.Website, password.Username,  ProcessPassword(settings.IsClear,password.SecretPassword));
+                _ = table.AddRow(password.Website, password.Username, ProcessPassword(settings.IsClear, password.SecretPassword));
             }
             else
             {
@@ -50,7 +50,7 @@ namespace Passman.Commands.GetPassword
                     _ = table.AddRow(
                         password.Website,
                         password.Username,
-                        ProcessPassword(settings.IsClear,password.SecretPassword)
+                        ProcessPassword(settings.IsClear, password.SecretPassword)
                         );
                 });
 
@@ -61,7 +61,7 @@ namespace Passman.Commands.GetPassword
 
         private string ProcessPassword(bool isClear, string password)
         {
-            return isClear ?  password:"*******" ;
+            return isClear ? password : "*******";
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
-namespace Passman.Commands.SavePasswords
+namespace Passman.Commands
 {
     public class SavePasswordCommand : Command<SavePasswordCommand.SavePasswordSettings>
     {
@@ -15,7 +15,7 @@ namespace Passman.Commands.SavePasswords
 
             [CommandArgument(1, "<USERNAME>")]
             [Description("Your username on the site")]
-            public string Username { get; set; } =String.Empty;
+            public string Username { get; set; } = String.Empty;
 
 
             [CommandArgument(1, "<PASSWORD>")]
