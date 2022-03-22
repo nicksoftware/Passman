@@ -1,5 +1,4 @@
-﻿using Passman.Commands.GetPassword;
-using Passman.Commands.SavePasswords;
+﻿using Passman.Commands;
 using PasswordManager.Commands;
 using Spectre.Console.Cli;
 
@@ -22,7 +21,7 @@ app.Configure(config =>
 
     _ = config.AddCommand<GeneratePasswordCommand>("generate")
         .WithAlias("-g")
-        .WithDescription("Get an existing password")
+        .WithDescription("Generate new password")
         .WithExample(new[] { "generate", "nick.co.za" });
 });
 
