@@ -7,9 +7,9 @@ using Spectre.Console.Cli;
 
 namespace PasswordManager.Commands
 {
-    public class GeneratePasswordCommand : Command<GeneratePasswordCommand.GeneratePasswordSettings>
+    public  class GeneratePasswordCommand : Command<GeneratePasswordCommand.GeneratePasswordSettings>
     {
-        public class GeneratePasswordSettings : CommandSettings
+        public  class GeneratePasswordSettings : CommandSettings
         {
             [CommandArgument(0, "<WEBSITE_NAME>")]
             [Description("Website name")]
@@ -63,49 +63,39 @@ namespace PasswordManager.Commands
                 .Start("Saving Password...", ctx =>
                 {
                     // Simulate some work
-                    _ = ctx.Status("Encrypting Data...");
+                    ctx.Status("Encrypting Data...");
                     // AnsiConsole.MarkupLine("Encrypting Data...");
-                    _ = ctx.Spinner(Spinner.Known.Star);
+                    ctx.Spinner(Spinner.Known.Star);
                     Thread.Sleep(1000);
-
                     // Update the status and spinner
-                    _ = ctx.Status("Finalizing Encryption");
-                    _ = ctx.Spinner(Spinner.Known.Star);
-                    _ = ctx.SpinnerStyle(Style.Parse("green"));
+                    ctx.Status("Finalizing Encryption");
+                    ctx.Spinner(Spinner.Known.Star);
+                    ctx.SpinnerStyle(Style.Parse("green"));
                     Thread.Sleep(1000);
-
                 });
             AnsiConsole.MarkupLine("[green]Password Saved 😁[/]");
-
             return 0;
         }
         private static string GenerateRandomPassword(
             int length,
-            bool includeSpecialChar,
-            bool includeNumerics)
+            bool includeSpecialChar =false,
+            bool includeNumerics = false)
         {
             Random random = new();
             StringBuilder builder = new();
 
             string alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
             string specialSymbols = "!@#$%^&*-+=:?/.,';~`±§";
             string numerics = "0123456789";
 
-            _ = builder.Append(alphabets.ToLower());
-            _ = builder.Append(alphabets);
+            builder.Append(alphabets.ToLower());
+            builder.Append(alphabets);
 
-            if (includeSpecialChar)
-            {
-                _ = builder.Append(specialSymbols);
-            }
+            if (includeSpecialChar) builder.Append(specialSymbols);
 
-            if (includeNumerics)
-            {
-                _ = builder.Append(numerics);
-            }
+            if (includeNumerics) builder.Append(numerics);
 
-            string chars = builder.ToString();
+            string chars = builder.ToString(); 
             return new string(Enumerable.Repeat(chars, length)
                 .Select(s => s[random.Next(s.Length)]).ToArray());
         }
