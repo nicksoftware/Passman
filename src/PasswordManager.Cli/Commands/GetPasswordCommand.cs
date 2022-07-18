@@ -53,15 +53,10 @@ namespace Passman.Commands
                         ProcessPassword(settings.IsClear, password.SecretPassword)
                         );
                 });
-
             }
             AnsiConsole.Write(table);
             return 0;
         }
-
-        private string ProcessPassword(bool isClear, string password)
-        {
-            return isClear ? password : "*******";
-        }
+        private string ProcessPassword(bool isClear, string password) => isClear ? password : "*******";
     }
 }
